@@ -17,15 +17,15 @@ public class Number {
 	// ball size
 	private final int BALL_SIZE = 16;
 
-	// record coordinate of ball
+	// original coordinate of ball
 	private int ballX = 120;
 	private int ballY = 20;
 
-	// record speed of ball in coordinate
+	// speed of ball in coordinate
 	private int speedX = 10;
 	private int speedY = 5;
 
-	// coordinate of racket
+	// original coordinate of racket
 	private int racketX = 120;
 	private int racketY = 340;
 
@@ -35,17 +35,23 @@ public class Number {
 	// declare a timer
 	private Timer timer;
 
+	public static void main(String[] args) {
+		new Number().init();
+
+	}
+
 	// declare a class inherited from class canvas
 	private class MyCanvas extends Canvas {
 		public void paint(Graphics g) {
 			// Game over
-			if (isOver == true) {
+			if (isOver) {
+				System.out.println(isOver);
 				g.setColor(Color.BLUE);
 				g.setFont(new Font("Times New Roman", Font.BOLD, 30));
 				g.drawString("Game Over", 50, 200);
 			} else {
 				// Game continue
-
+				System.out.println(2);
 				// Draw ball
 				g.setColor(Color.RED);// set color
 				g.fillOval(ballX, ballY, BALL_SIZE, BALL_SIZE);// fill color of ball
@@ -85,8 +91,9 @@ public class Number {
 						racketX += 10;
 				}
 			}
-		};
 
+		};
+		System.out.println("init 2");
 		// frame and drawArea listener
 		frame.addKeyListener(listener);
 		drawArea.addKeyListener(listener);
@@ -98,13 +105,14 @@ public class Number {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				// renew speed according to the border of the drawArea
-				if (ballX <= 0 || ballX >= TABLE_WIDTH - BALL_SIZE)
+				if (ballX <= 0 || ballX >= (TABLE_WIDTH - BALL_SIZE))
 					speedX = -speedX;
 
-				if (ballY <= 0 || ballY > racketY - BALL_SIZE && ballX > racketX && ballX < racketX - RACKET_WIDTH)
+				if (ballY <= 0
+						|| (ballY > (racketY - BALL_SIZE) && ballX > racketX && ballX < (racketX + RACKET_WIDTH)))
 					speedY = -speedY;
 
-				if (ballY > racketY - BALL_SIZE && ballX < racketX || ballX > racketX - RACKET_WIDTH) {
+				if (ballY > (racketY - BALL_SIZE) && (ballX < racketX || ballX > (racketX + RACKET_WIDTH))) {
 					timer.stop();
 					isOver = true;
 					drawArea.repaint();
@@ -119,16 +127,12 @@ public class Number {
 
 		timer = new Timer(100, task);
 		timer.start();
-		
-		drawArea.setPreferredSize( new Dimension(TABLE_WIDTH, TABLE_HEIGHT));
-        frame.add(drawArea);
-        
+
+		drawArea.setPreferredSize(new Dimension(TABLE_WIDTH, TABLE_HEIGHT));
+		System.out.println("init 1");
+		frame.add(drawArea);
+
 		frame.pack();
 		frame.setVisible(true);
-	}
-
-	public static void main(String[] args) {
-
-		new Number().init();
 	}
 }
